@@ -139,7 +139,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Restaurant Management.cpp" />
+    <ClCompile Include="Managerment.cpp" />
+    <ClCompile Include="Restaurant Management.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Customer.h" />
+    <ClInclude Include="Cust_info.h" />
+    <ClInclude Include="Dishes.h" />
+    <ClInclude Include="Material.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="Raw_material.h" />
+    <ClInclude Include="Worker.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

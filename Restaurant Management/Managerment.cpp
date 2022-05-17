@@ -1,22 +1,195 @@
-ï»¿#include <iostream>
+#include <iostream>
 using namespace std;
 #include <string>
 #include <fstream>
-#include "Raw_material.h"
-#include "Dishes.h"
-#include "Customer.h"
 #define Material_File "Raw_Material.txt"
 #define Menu_File "Menu.txt"
 #define Customer_File "Customer.txt"
-//#include "Worker.h"
-//#include "Material.h"
-//#include "Menu.h"
-//#include "Cust_info.h"
 
+class Raw_material { //Ô­²ÄÁÏ
+public:
+	Raw_material() {
+		this->R_name = { 0 };
+		this->R_price = 0.0;
+	}
+
+	Raw_material(string name, double price) {
+		R_name = name;
+		R_price = price;
+	}
+	void show_info() {
+		cout << "Raw Material name: " << R_name << " Price: " << R_price << endl;
+	}
+
+	string R_name;
+	double R_price;
+};
+
+class Dishes { //dishes ²ËÆ·
+public:
+
+	Dishes() {
+
+	}
+
+	Dishes(int num, string name, double price, Raw_material make) {
+		D_make = make;
+		D_num = num;
+		D_name = name;
+		D_price = price;
+	}
+
+	void show_info() {
+		cout << "Dish NO: " << D_num << " Dish name: " << D_name << " Price: " << D_price
+			<< " Raw materials neede: " << D_make.R_name << endl;
+	}
+
+	Raw_material D_make;
+	int D_num;
+	string D_name;
+	double D_price;
+};
+
+class Customer { //¹Ë¿Í
+public:
+
+	virtual void show_info() = 0;
+
+	void show_Menu() {
+		cout << "Please input your choice: " << endl;
+		cout << "1. View the Menu." << endl;
+		cout << "2. Take order." << endl;
+		cout << "3. Check out." << endl;
+	}
+
+	void C_order();
+
+	bool Dish_check(int Dish_id) {
+		for (int i = 0; i < Dish_num; i++) {
+			if (this->D_array[i].D_num = Dish_id) {
+				cout << "You have already order the dish" << endl;
+				return false;
+			}
+		}
+		return true;
+	}
+
+	virtual double check_out() = 0;
+
+	virtual double profit() = 0;
+
+	int is_Exist(int Dish_id);
+
+	string C_name;
+	string C_gender;
+	string C_phone;
+	Dishes* D_array;
+	int Dish_num;
+	int Dep_id;
+};
+
+class Vip_Cust : public Customer {
+public:
+
+	Vip_Cust(string name, string gender, string phone, int dep_id) {
+		this->C_name = name;
+		this->C_gender = gender;
+		this->C_phone = phone;
+		this->Dep_id = dep_id;
+		this->D_array = NULL;
+	}
+
+	virtual void show_info() {
+		cout << "Name: " << C_name << " Gender: " << C_gender << " Phone Number: " << C_phone << endl;
+	}
+
+	virtual double check_out() {
+		double sum = 0;
+		for (int i = 0; i < this->Dish_num; i++) {
+			sum += this->D_array[i].D_price;
+		}
+		return sum * 0.7;
+	}
+
+	virtual double profit() {
+		double Raw_Cost = 0;
+		for (int i = 0; i < this->Dish_num; i++) {
+			Raw_Cost += this->D_array[i].D_make.R_price;
+		}
+		return this->check_out() - Raw_Cost;
+	}
+
+};
+
+class Member_Cust : public Customer {
+public:
+
+	Member_Cust(string name, string gender, string phone, int dep_id) {
+		this->C_name = name;
+		this->C_gender = gender;
+		this->C_phone = phone;
+		this->Dep_id = dep_id;
+		this->D_array = NULL;
+	}
+
+	virtual void show_info() {
+		cout << "Name: " << C_name << " Gender: " << C_gender << " Phone Number: " << C_phone << endl;
+	}
+
+	virtual double check_out() {
+		double sum = 0;
+		for (int i = 0; i < this->Dish_num; i++) {
+			sum += this->D_array[i].D_price;
+		}
+		return sum * 0.8;
+	}
+
+	virtual double profit() {
+		double Raw_Cost = 0;
+		for (int i = 0; i < this->Dish_num; i++) {
+			Raw_Cost += this->D_array[i].D_make.R_price;
+		}
+		return this->check_out() - Raw_Cost;
+	}
+
+};
+
+class Ordinary_Cust : public Customer {
+public:
+
+	Ordinary_Cust(string name, string gender, string phone, int dep_id) {
+		this->C_name = name;
+		this->C_gender = gender;
+		this->C_phone = phone;
+		this->Dep_id = dep_id;
+		this->D_array = NULL;
+	}
+
+	virtual void show_info() {
+		cout << "Name: " << C_name << " Gender: " << C_gender << " Phone Number: " << C_phone << endl;
+	}
+
+	virtual double check_out() {
+		double sum = 0;
+		for (int i = 0; i < this->Dish_num; i++) {
+			sum += this->D_array[i].D_price;
+		}
+		return sum;
+	}
+
+	virtual double profit() {
+		double Raw_Cost = 0;
+		for (int i = 0; i < this->Dish_num; i++) {
+			Raw_Cost += this->D_array[i].D_make.R_price;
+		}
+		return this->check_out() - Raw_Cost;
+	}
+
+};
 
 class Worker {
 public:
-	//Worker(); //ç”¨æ–‡ä»¶ä¿å­˜ save
+	//Worker(); //ÓÃÎÄ¼ş±£´æ save
 
 	virtual void init_value() = 0;
 
@@ -49,15 +222,16 @@ public:
 	Customer** Cust_array;
 	int m_CustNum;
 	bool m_CustIsEmpty;
-};
 
+};
+//ä¯ÀÀ¡¢Ìí¼Ó¡¢ĞŞ¸ÄºÍÉ¾³ıÔ­²ÄÁÏĞÅÏ¢¡¢²Ëµ¥ĞÅÏ¢ºÍ¿Í»§ĞÅÏ¢£»
 class Material : public Worker {
 public:
 	Material() {
-		ifstream ifs; //åˆ›å»ºæ–‡ä»¶
+		ifstream ifs; //´´½¨ÎÄ¼ş
 		ifs.open(Material_File, ios::in);
 
-		if (!ifs.is_open()) { //æ–‡ä»¶æœªåˆ›å»º
+		if (!ifs.is_open()) { //ÎÄ¼şÎ´´´½¨
 			this->m_RawNum = 0;
 			this->raw_array = NULL;
 			m_FileIsEmpty = true;
@@ -65,8 +239,8 @@ public:
 			return;
 		}
 
-		char ch; ifs >> ch; //æ–‡ä»¶å­˜åœ¨å¹¶ä¸”æ²¡æœ‰è®°å½•
-		if (ifs.eof()) { //å½“å‰ä¸ºå°¾éƒ¨
+		char ch; ifs >> ch; //ÎÄ¼ş´æÔÚ²¢ÇÒÃ»ÓĞ¼ÇÂ¼
+		if (ifs.eof()) { //µ±Ç°ÎªÎ²²¿
 			this->m_RawNum = 0;
 			this->m_FileIsEmpty = true;
 			this->raw_array = NULL;
@@ -74,10 +248,10 @@ public:
 			return;
 		}
 
-		int num = this->get_Num(); // æ–‡ä»¶å­˜åœ¨ä¸”ä¸ä¸ºç©º
+		int num = this->get_Num(); // ÎÄ¼ş´æÔÚÇÒ²»Îª¿Õ
 		this->m_RawNum = num;
 
-		//å¼€è¾Ÿç©ºé—´
+		//¿ª±Ù¿Õ¼ä
 		this->raw_array = new Raw_material[this->m_RawNum];
 		this->init_value();
 	}
@@ -139,7 +313,7 @@ public:
 			}
 		}
 
-		string name;		//è¾“å…¥æ–°æ•°æ®
+		string name;		//ÊäÈëĞÂÊı¾İ
 		double price;
 		cout << "Please input the Raw material name" << endl;
 		cin >> name;
@@ -198,7 +372,7 @@ public:
 		}
 		for (int i = deleteNum; i < this->m_RawNum; i++) {
 
-			this->raw_array[i] = this->raw_array[i + 1]; //è¦†ç›–
+			this->raw_array[i] = this->raw_array[i + 1]; //¸²¸Ç
 
 		}
 
@@ -246,10 +420,10 @@ class Menu : public Worker {
 public:
 
 	Menu() {
-		ifstream ifs; //åˆ›å»ºæ–‡ä»¶
+		ifstream ifs; //´´½¨ÎÄ¼ş
 		ifs.open(Menu_File, ios::in);
 
-		if (!ifs.is_open()) { //æ–‡ä»¶æœªåˆ›å»º
+		if (!ifs.is_open()) { //ÎÄ¼şÎ´´´½¨
 			this->m_DishNum = 0;
 			this->Dish_array = NULL;
 			m_MenuIsEmpty = true;
@@ -257,8 +431,8 @@ public:
 			return;
 		}
 
-		char ch; ifs >> ch; //æ–‡ä»¶å­˜åœ¨å¹¶ä¸”æ²¡æœ‰è®°å½•
-		if (ifs.eof()) { //å½“å‰ä¸ºå°¾éƒ¨
+		char ch; ifs >> ch; //ÎÄ¼ş´æÔÚ²¢ÇÒÃ»ÓĞ¼ÇÂ¼
+		if (ifs.eof()) { //µ±Ç°ÎªÎ²²¿
 			this->m_DishNum = 0;
 			this->m_MenuIsEmpty = true;
 			this->Dish_array = NULL;
@@ -266,11 +440,11 @@ public:
 			return;
 		}
 
-		int num = this->get_Num(); // æ–‡ä»¶å­˜åœ¨ä¸”ä¸ä¸ºç©º
+		int num = this->get_Num(); // ÎÄ¼ş´æÔÚÇÒ²»Îª¿Õ
 		this->m_DishNum = num;
 
 
-		//å¼€è¾Ÿç©ºé—´
+		//¿ª±Ù¿Õ¼ä
 		this->Dish_array = new Dishes[this->m_DishNum];
 		this->init_value();
 	}
@@ -342,7 +516,7 @@ public:
 		}
 
 		int id_num;
-		string name;		//è¾“å…¥æ–°æ•°æ®
+		string name;		//ÊäÈëĞÂÊı¾İ
 		double price;
 		string raw_name;
 
@@ -430,7 +604,7 @@ public:
 		}
 		for (int i = deleteNum; i < this->m_DishNum; i++) {
 
-			this->Dish_array[i] = this->Dish_array[i + 1]; //è¦†ç›–
+			this->Dish_array[i] = this->Dish_array[i + 1]; //¸²¸Ç
 
 		}
 		this->m_RawNum--;
@@ -476,10 +650,10 @@ class Cust_info : public Worker {
 public:
 	Cust_info() {
 
-		ifstream ifs; //åˆ›å»ºæ–‡ä»¶
+		ifstream ifs; //´´½¨ÎÄ¼ş
 		ifs.open(Customer_File, ios::in);
 
-		if (!ifs.is_open()) { //æ–‡ä»¶æœªåˆ›å»º
+		if (!ifs.is_open()) { //ÎÄ¼şÎ´´´½¨
 			this->m_CustNum = 0;
 			this->Cust_array = NULL;
 			m_CustIsEmpty = true;
@@ -487,8 +661,8 @@ public:
 			return;
 		}
 
-		char ch; ifs >> ch; //æ–‡ä»¶å­˜åœ¨å¹¶ä¸”æ²¡æœ‰è®°å½•
-		if (ifs.eof()) { //å½“å‰ä¸ºå°¾éƒ¨
+		char ch; ifs >> ch; //ÎÄ¼ş´æÔÚ²¢ÇÒÃ»ÓĞ¼ÇÂ¼
+		if (ifs.eof()) { //µ±Ç°ÎªÎ²²¿
 			this->m_CustNum = 0;
 			this->m_CustIsEmpty = true;
 			this->Cust_array = NULL;
@@ -496,10 +670,10 @@ public:
 			return;
 		}
 
-		int num = this->get_Num(); // æ–‡ä»¶å­˜åœ¨ä¸”ä¸ä¸ºç©º
+		int num = this->get_Num(); // ÎÄ¼ş´æÔÚÇÒ²»Îª¿Õ
 		this->m_CustNum = num;
 
-		//å¼€è¾Ÿç©ºé—´
+		//¿ª±Ù¿Õ¼ä
 		this->Cust_array = new Customer * [this->m_CustNum];
 		this->init_value();
 	}
@@ -590,7 +764,7 @@ public:
 		cout << "1. Male" << endl;
 		cout << "2. Female" << endl;
 		cin >> input;
-		gender = input == 1 ? "ç”·" : "å¥³";
+		gender = input == 1 ? "ÄĞ" : "Å®";
 
 		cout << "Please input the Phone Number:" << endl;
 		cin >> phone;
@@ -646,7 +820,7 @@ public:
 				cout << "1. Male" << endl;
 				cout << "2. Female" << endl;
 				cin >> input;
-				new_gender = input == 1 ? "ç”·" : "å¥³";
+				new_gender = input == 1 ? "ÄĞ" : "Å®";
 				this->Cust_array[i]->C_gender = new_gender;
 
 				cout << "Please enter new Phone Number: " << endl;
@@ -697,7 +871,7 @@ public:
 		}
 		for (int i = deleteNum; i < this->m_CustNum; i++) {
 
-			this->Cust_array[i] = this->Cust_array[i + 1]; //è¦†ç›–
+			this->Cust_array[i] = this->Cust_array[i + 1]; //¸²¸Ç
 
 		}
 		this->m_RawNum--;
@@ -737,7 +911,38 @@ public:
 	}
 };
 
+void Customer::C_order() {
+	int Dish_num;
+	int Dish_id;
+	Worker* worker = NULL;
+	cout << "Please input the numbers of your dishes: " << endl;
+	cin >> Dish_num;
+	if (Dish_num > 0) {
+		for (int i = 0; i < Dish_num; i++) {
+			cout << "Please input your ordered dish:" << endl;
+			cin >> Dish_id;
+			if (is_Exist(Dish_id) != -1 && Dish_check(Dish_id)) {
+				this->D_array[i] = worker->Dish_array[is_Exist(Dish_id)];
+			}
+			else {
+				cout << "You have failed!" << endl;
+			}
+		}
+	}
+	else {
+		cout << "Please input anthor" << endl;
+	}
 
+}
+
+int Customer::is_Exist(int Dish_id) {
+	Worker* worker = NULL;
+	for (int i = 0; i < worker->m_DishNum; i++) {
+		if (worker->Dish_array[i].D_num == Dish_id)
+			return i;
+	}
+	return -1;
+}
 
 void Manager_Operation() {
 	Worker* worker;
@@ -890,8 +1095,6 @@ void Customer_Operation(Customer* Cust, Worker* worker) {
 	}
 }
 
-
-
 int main()
 {
 	int id_Choice;
@@ -929,5 +1132,7 @@ int main()
 		cout << "Error input." << endl;
 		break;
 	}
-}
 
+
+	return 0;
+}

@@ -1,22 +1,18 @@
-ï»¿#include <iostream>
+#pragma once
+#include <iostream>
 using namespace std;
 #include <string>
-#include <fstream>
-#include "Raw_material.h"
-#include "Dishes.h"
-#include "Customer.h"
 #define Material_File "Raw_Material.txt"
 #define Menu_File "Menu.txt"
 #define Customer_File "Customer.txt"
-//#include "Worker.h"
-//#include "Material.h"
-//#include "Menu.h"
-//#include "Cust_info.h"
-
+#include "Raw_material.h"
+#include "Dishes.h"
+#include <fstream>
+#include "Customer.h"
 
 class Worker {
 public:
-	//Worker(); //ç”¨æ–‡ä»¶ä¿å­˜ save
+	//Worker(); //ÓÃÎÄ¼ş±£´æ save
 
 	virtual void init_value() = 0;
 
@@ -54,10 +50,10 @@ public:
 class Material : public Worker {
 public:
 	Material() {
-		ifstream ifs; //åˆ›å»ºæ–‡ä»¶
+		ifstream ifs; //´´½¨ÎÄ¼ş
 		ifs.open(Material_File, ios::in);
 
-		if (!ifs.is_open()) { //æ–‡ä»¶æœªåˆ›å»º
+		if (!ifs.is_open()) { //ÎÄ¼şÎ´´´½¨
 			this->m_RawNum = 0;
 			this->raw_array = NULL;
 			m_FileIsEmpty = true;
@@ -65,8 +61,8 @@ public:
 			return;
 		}
 
-		char ch; ifs >> ch; //æ–‡ä»¶å­˜åœ¨å¹¶ä¸”æ²¡æœ‰è®°å½•
-		if (ifs.eof()) { //å½“å‰ä¸ºå°¾éƒ¨
+		char ch; ifs >> ch; //ÎÄ¼ş´æÔÚ²¢ÇÒÃ»ÓĞ¼ÇÂ¼
+		if (ifs.eof()) { //µ±Ç°ÎªÎ²²¿
 			this->m_RawNum = 0;
 			this->m_FileIsEmpty = true;
 			this->raw_array = NULL;
@@ -74,10 +70,10 @@ public:
 			return;
 		}
 
-		int num = this->get_Num(); // æ–‡ä»¶å­˜åœ¨ä¸”ä¸ä¸ºç©º
+		int num = this->get_Num(); // ÎÄ¼ş´æÔÚÇÒ²»Îª¿Õ
 		this->m_RawNum = num;
 
-		//å¼€è¾Ÿç©ºé—´
+		//¿ª±Ù¿Õ¼ä
 		this->raw_array = new Raw_material[this->m_RawNum];
 		this->init_value();
 	}
@@ -139,7 +135,7 @@ public:
 			}
 		}
 
-		string name;		//è¾“å…¥æ–°æ•°æ®
+		string name;		//ÊäÈëĞÂÊı¾İ
 		double price;
 		cout << "Please input the Raw material name" << endl;
 		cin >> name;
@@ -198,7 +194,7 @@ public:
 		}
 		for (int i = deleteNum; i < this->m_RawNum; i++) {
 
-			this->raw_array[i] = this->raw_array[i + 1]; //è¦†ç›–
+			this->raw_array[i] = this->raw_array[i + 1]; //¸²¸Ç
 
 		}
 
@@ -246,10 +242,10 @@ class Menu : public Worker {
 public:
 
 	Menu() {
-		ifstream ifs; //åˆ›å»ºæ–‡ä»¶
+		ifstream ifs; //´´½¨ÎÄ¼ş
 		ifs.open(Menu_File, ios::in);
 
-		if (!ifs.is_open()) { //æ–‡ä»¶æœªåˆ›å»º
+		if (!ifs.is_open()) { //ÎÄ¼şÎ´´´½¨
 			this->m_DishNum = 0;
 			this->Dish_array = NULL;
 			m_MenuIsEmpty = true;
@@ -257,8 +253,8 @@ public:
 			return;
 		}
 
-		char ch; ifs >> ch; //æ–‡ä»¶å­˜åœ¨å¹¶ä¸”æ²¡æœ‰è®°å½•
-		if (ifs.eof()) { //å½“å‰ä¸ºå°¾éƒ¨
+		char ch; ifs >> ch; //ÎÄ¼ş´æÔÚ²¢ÇÒÃ»ÓĞ¼ÇÂ¼
+		if (ifs.eof()) { //µ±Ç°ÎªÎ²²¿
 			this->m_DishNum = 0;
 			this->m_MenuIsEmpty = true;
 			this->Dish_array = NULL;
@@ -266,11 +262,11 @@ public:
 			return;
 		}
 
-		int num = this->get_Num(); // æ–‡ä»¶å­˜åœ¨ä¸”ä¸ä¸ºç©º
+		int num = this->get_Num(); // ÎÄ¼ş´æÔÚÇÒ²»Îª¿Õ
 		this->m_DishNum = num;
 
 
-		//å¼€è¾Ÿç©ºé—´
+		//¿ª±Ù¿Õ¼ä
 		this->Dish_array = new Dishes[this->m_DishNum];
 		this->init_value();
 	}
@@ -342,7 +338,7 @@ public:
 		}
 
 		int id_num;
-		string name;		//è¾“å…¥æ–°æ•°æ®
+		string name;		//ÊäÈëĞÂÊı¾İ
 		double price;
 		string raw_name;
 
@@ -430,7 +426,7 @@ public:
 		}
 		for (int i = deleteNum; i < this->m_DishNum; i++) {
 
-			this->Dish_array[i] = this->Dish_array[i + 1]; //è¦†ç›–
+			this->Dish_array[i] = this->Dish_array[i + 1]; //¸²¸Ç
 
 		}
 		this->m_RawNum--;
@@ -476,10 +472,10 @@ class Cust_info : public Worker {
 public:
 	Cust_info() {
 
-		ifstream ifs; //åˆ›å»ºæ–‡ä»¶
+		ifstream ifs; //´´½¨ÎÄ¼ş
 		ifs.open(Customer_File, ios::in);
 
-		if (!ifs.is_open()) { //æ–‡ä»¶æœªåˆ›å»º
+		if (!ifs.is_open()) { //ÎÄ¼şÎ´´´½¨
 			this->m_CustNum = 0;
 			this->Cust_array = NULL;
 			m_CustIsEmpty = true;
@@ -487,8 +483,8 @@ public:
 			return;
 		}
 
-		char ch; ifs >> ch; //æ–‡ä»¶å­˜åœ¨å¹¶ä¸”æ²¡æœ‰è®°å½•
-		if (ifs.eof()) { //å½“å‰ä¸ºå°¾éƒ¨
+		char ch; ifs >> ch; //ÎÄ¼ş´æÔÚ²¢ÇÒÃ»ÓĞ¼ÇÂ¼
+		if (ifs.eof()) { //µ±Ç°ÎªÎ²²¿
 			this->m_CustNum = 0;
 			this->m_CustIsEmpty = true;
 			this->Cust_array = NULL;
@@ -496,10 +492,10 @@ public:
 			return;
 		}
 
-		int num = this->get_Num(); // æ–‡ä»¶å­˜åœ¨ä¸”ä¸ä¸ºç©º
+		int num = this->get_Num(); // ÎÄ¼ş´æÔÚÇÒ²»Îª¿Õ
 		this->m_CustNum = num;
 
-		//å¼€è¾Ÿç©ºé—´
+		//¿ª±Ù¿Õ¼ä
 		this->Cust_array = new Customer * [this->m_CustNum];
 		this->init_value();
 	}
@@ -590,7 +586,7 @@ public:
 		cout << "1. Male" << endl;
 		cout << "2. Female" << endl;
 		cin >> input;
-		gender = input == 1 ? "ç”·" : "å¥³";
+		gender = input == 1 ? "ÄĞ" : "Å®";
 
 		cout << "Please input the Phone Number:" << endl;
 		cin >> phone;
@@ -646,7 +642,7 @@ public:
 				cout << "1. Male" << endl;
 				cout << "2. Female" << endl;
 				cin >> input;
-				new_gender = input == 1 ? "ç”·" : "å¥³";
+				new_gender = input == 1 ? "ÄĞ" : "Å®";
 				this->Cust_array[i]->C_gender = new_gender;
 
 				cout << "Please enter new Phone Number: " << endl;
@@ -697,7 +693,7 @@ public:
 		}
 		for (int i = deleteNum; i < this->m_CustNum; i++) {
 
-			this->Cust_array[i] = this->Cust_array[i + 1]; //è¦†ç›–
+			this->Cust_array[i] = this->Cust_array[i + 1]; //¸²¸Ç
 
 		}
 		this->m_RawNum--;
@@ -736,198 +732,4 @@ public:
 		}
 	}
 };
-
-
-
-void Manager_Operation() {
-	Worker* worker;
-	int input;
-	cout << "Please input your choice: " << endl;
-	cout << "1. Raw materials interface." << endl;
-	cout << "2. Menu interface." << endl;
-	cout << "3. Customer interface." << endl;
-	cin >> input;
-	switch (input)
-	{
-	case 1:
-		worker = new Material();
-		worker->show_Menu();
-		int input1;
-		cin >> input1;
-		switch (input1)
-		{
-		case 1:
-			worker->Browse();
-			break;
-		case 2:
-			worker->Add();
-			break;
-		case 3:
-			worker->Amend();
-			break;
-		case 4:
-			worker->Delete();
-			break;
-		}
-		break;
-	case 2:
-		worker = new Menu();
-		worker->show_Menu();
-		int input2;
-		cin >> input2;
-		switch (input2)
-		{
-		case 1:
-			worker->Browse();
-			break;
-		case 2:
-			worker->Add();
-			break;
-		case 3:
-			worker->Amend();
-			break;
-		case 4:
-			worker->Delete();
-			break;
-		}
-		break;
-	case 3:
-		worker = new Cust_info();
-		worker->show_Menu();
-		int input3;
-		cin >> input3;
-		switch (input3)
-		{
-		case 1:
-			worker->Browse();
-			break;
-		case 2:
-			worker->Add();
-			break;
-		case 3:
-			worker->Amend();
-			break;
-		case 4:
-			worker->Delete();
-			break;
-		}
-		break;
-	default:
-		cout << "Error input!" << endl;
-		break;
-	}
-
-}
-
-void Chef_Operation() {
-	int input;
-	Worker* worker = NULL;
-	cout << "Please input your choice: " << endl;
-	cout << "1. Search raw material." << endl;
-	cout << "2. Browse raw material." << endl;
-	cout << "3. Edit the Menu." << endl;
-	cin >> input;
-	switch (input)
-	{
-	case 1:
-		worker = new Material();
-		worker->research();
-		break;
-	case 2:
-		worker = new Material();
-		worker->Browse();
-		break;
-	case 3:
-		worker = new Menu();
-		worker->show_Menu();
-		int select;
-		cin >> select;
-		switch (select)
-		{
-		case 1:
-			worker->Browse();
-			break;
-		case 2:
-			worker->Add();
-			break;
-		case 3:
-			worker->Amend();
-			break;
-		case 4:
-			worker->Delete();
-			break;
-		}
-		break;
-	default:
-		break;
-	}
-};
-
-void show_interface() {
-	cout << "Please choose the correct identity: " << endl;
-	cout << "1. Manager" << endl;
-	cout << "2. Chef" << endl;
-	cout << "3. Customer" << endl;
-}
-
-void Customer_Operation(Customer* Cust, Worker* worker) {
-	Cust->show_Menu();
-	int input;
-	cin >> input;
-	switch (input) {
-	case 1:
-		worker->Browse();
-		break;
-	case 2:
-		Cust->C_order();
-		break;
-	case 3:
-		Cust->check_out();
-		break;
-	default:
-		cout << "Please choose again" << endl;
-		break;
-	}
-}
-
-
-
-int main()
-{
-	int id_Choice;
-	show_interface();
-	cin >> id_Choice;
-	string name;
-	Worker* worker = NULL;
-
-	switch (id_Choice)
-	{
-	case 1:
-		cout << "Welcome to Manager Page!" << endl;
-		Manager_Operation();
-		break;
-	case 2:
-		cout << "Welcome to Chef Page!" << endl;
-		Chef_Operation();
-		break;
-	case 3:
-		worker = new Cust_info();
-		cout << "Log-in interface" << endl;
-		cout << "Please input you name: ";
-		cin >> name;
-		for (int i = 0; i < worker->m_CustNum; i++) {
-			if (worker->Cust_array[i]->C_name == name) {
-				cout << "Welcome to Customer Page!" << endl;
-				Customer_Operation(worker->Cust_array[i], new Menu());
-			}
-			else {
-				cout << "You do not have a count" << endl;
-			}
-		}
-		break;
-	default:
-		cout << "Error input." << endl;
-		break;
-	}
-}
 
